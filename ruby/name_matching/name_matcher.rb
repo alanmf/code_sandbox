@@ -1,6 +1,3 @@
-name_list_test = ["joe smith", "joe_smith", "joe-smith jones"]
-
-
 class PersonName
   attr_accessor :first
   attr_accessor :last
@@ -84,16 +81,20 @@ def create_people(name_list)
 end
 
 def get_name_list(filename)
+  #open the file and read it in (it's just one line)
   f = File.open(filename).each_line { |s| @list=s }
   f.close
-  puts 'here'
+  
+  #split the list on ",", we can't just have commas because name might have them
   @list = @list.split('","')
 
   #sanitize the data
-  #remove doubles quotes from strings
-  #remove spaces from beginning and end of string
+    #remove doubles quotes from strings
+    #remove spaces from beginning and end of string
+    #downcase the string
   @list.each do |name|
     name.gsub!('"', "") if name.include?('"')
+    name.downcase!
     name.rstrip!
     name.lstrip!
   end
