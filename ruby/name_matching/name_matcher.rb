@@ -1,3 +1,40 @@
+#NAME-MATCHING v.1, attempt to identify similar and equivalent names in a list of them
+#############################
+#Copyright (C) 2011 Alan Feuerlein
+
+#This program is free software: you can redistribute it and/or modify
+#it under the terms of the GNU General Public License as published by
+#the Free Software Foundation, either version 3 of the License, or
+#(at your option) any later version.
+
+#This program is distributed in the hope that it will be useful,
+#but WITHOUT ANY WARRANTY; without even the implied warranty of
+#MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#GNU General Public License for more details.
+
+#You should have received a copy of the GNU General Public License
+#along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+#############################
+#This script does several things,
+
+#1 - reads data in from a file that is formatted as "string","string1","string2","...etc and sanitizes the data
+
+#2 - removes special characters from the names and splits on spaces, returning an array, e.g. "joe_smith jones" becomes ["joe", "smith", "jones"] and "clint eastwood" becomes ["clint", "eastwood"]
+
+#3 - create a 'PersonName' object based on the names that were read in, sanitized, and split, then add that object to an array of objects called 'People'
+
+#4 - create methods to identify how similar a name is to another, and if they are equivalent
+
+#current goal:
+  #iterate over the list of names and determine which are equivalent, and which are similar, in varying degrees 
+
+#future goals:
+  #abstract the data from names to just strings
+  #optimize to work on monstrous data sets
+
+
+#define the PersonName class and it's associated methods
 class PersonName
   attr_accessor :first
   attr_accessor :last
@@ -20,7 +57,7 @@ class PersonName
     #one name is like another if they have all the same characters
     self.alphabetize == another_person.alphabetize
   end
-
+  
   def alphabetize
     (self.first + self.middle + self.last).split(//).sort.join
   end
@@ -63,7 +100,9 @@ def create_people(name_list)
   people = []
   name_list.each do |name|
     person = PersonName.new
+    #store the original name
     person.original_name = name
+    #define the special characters that may be contained in names that we should split on
     names = rec_split_combiner(name, [',', '-', '_', ' '])
     case names.size
       when 1
@@ -74,8 +113,10 @@ def create_people(name_list)
       else
         person.first = names.first
         person.last = names.last
+        #form the middle name from anything in the array that's not the first and last
         person.middle = names[1,names.size - 2].join(' ')#.join(' ')
       end
+      #add the person to the people array
       people << person
   end
 end
