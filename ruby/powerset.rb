@@ -38,14 +38,13 @@ end
 
 
 #for testing
-
+#add items to a new set
 newset = Set.new
 3.times do |y|
   newset.add(y)
 end
 
-puts newset.powerset
-c = 0
+#get it's powerset
 newset.powerset.each do |x|
-puts x.inspect
+  puts x.inspect
 end
