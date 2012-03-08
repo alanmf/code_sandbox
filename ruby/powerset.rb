@@ -6,9 +6,9 @@ class Set
   #an enumerator so it may be useful in cases of large sets
   def powerset
     as_array = to_a
-    Enumerator.new do |yielder|
-      (2** size).times do |x|
+    pset = Enumerator.new do |yielder|
 
+      (2** size).times do |x|
         #calculate the given binary representation
         #add the appropriate number of zero's to the front to maintain
         #the same length across all representations, so we can have
@@ -32,10 +32,12 @@ class Set
         #the above code in one line
         #yielder << Set.new((0..size).select {|i| as_array[i] if x[i] == "1"})
       end
+      def pset.count
+        2 ** as_array.size
+      end
     end
   end
 end
-
 
 #for testing
 #add items to a new set
@@ -46,5 +48,7 @@ end
 
 #get it's powerset
 newset.powerset.each do |x|
-  puts x.inspect
+ # puts x.inspect
 end
+
+puts newset.powerset.count
